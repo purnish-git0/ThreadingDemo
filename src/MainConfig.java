@@ -1,6 +1,6 @@
 import java.util.Properties;
 
-public abstract class MainConfig {
+public abstract class MainConfig extends Configuration {
 
 
 
