@@ -2,6 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ *
+ * A producer consumer in which there is max limit after
+ * which producer waits for consumer to consume any elments
+ * If list is empty consumer waits for producer
+ */
 public class Executor {
 
     public static void main(String[] args) {
