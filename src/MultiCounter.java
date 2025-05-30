@@ -3,6 +3,16 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ *
+ *
+ * A Multi Counter which takes turns adding to a shared list
+ * Insertion order is from thread id 0 to 9 then repeat
+ * When adding to List, String contains info about thread id
+ * adding to the list.
+ * In the output can be seen that the insertion order is cyclic
+ * based on thread id
+ */
 public class MultiCounter {
 
 
