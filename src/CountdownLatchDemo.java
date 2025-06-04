@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 public class CountdownLatchDemo {
 
     public static void main(String[] args) {
-        ExecutorClassCountdownLatch.startExec();
+        ExecutorClassCountdownLatch.countdownWithStart();
     }
 }
 
@@ -44,6 +44,63 @@ class ExecutorClassCountdownLatch{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     *
+     * Start countdownLatch is included so that
+     * all threads start at the same time, when the
+     * start is tripped post creation and start
+     * of all threads and end is incremented
+     * twice per thread.
+     */
+    public static void countdownWithStart() {
+        CountDownLatch start = new CountDownLatch(1);
+        CountDownLatch end = new CountDownLatch(10);
+
+        List<String> sharedList = new CopyOnWriteArrayList<>();
+
+        for(int i=0;i<15;i++) {
+            Thread t = new Thread(() -> {
+                try {
+                    start.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                int ctr = 0;
+                while(ctr<3) {
+
+                    if(Collections.frequency(sharedList,"_" + Thread.currentThread().getName())==0) {
+                        sharedList.add("_" + Thread.currentThread().getName());
+
+                        end.countDown();
+                        end.countDown();
+
+                    }
+
+                    ctr++;
+                }
+
+            });
+
+            t.start();
+        }
+
+        try {
+            start.countDown();
+            end.await();
+            System.out.println("End exec");
+            System.out.println(sharedList);
+            System.out.println(sharedList.size());
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
     }
 }
 
